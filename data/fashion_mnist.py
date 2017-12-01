@@ -8,6 +8,7 @@ IMAGE_SIZE = 28
 IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
 
 
+# TODO: reshape images to [28, 28, 1]
 class FashionMNIST:
     def __init__(self, shuffle=True):
         self.loaded_data = pd.read_csv(DATA_PATH)

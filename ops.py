@@ -16,3 +16,41 @@ def model_inputs(real_dim=IMAGE_PIXELS, z_dim=100):
 
 def batch_norm(inputs, training=True):
     return tf.layers.batch_normalization(inputs, training=training)
+
+
+#  TODO: How to collect this all variables
+def generator(z, output_channel=1, reuse=False, alpha=0.2, training=True, kernel_size=4):
+    """
+    This function creates generator.
+    
+    :param z: random noise, ex) tensor shapes [None, 100]
+    :param output_channel: number of channels of generated data, ex) 3 for SVHN, 1 for MNIST
+    :param reuse: ...
+    :param alpha: alpha value of leaky relu
+    :param training: ...
+    :param kernel_size: transposed conv layer's kernel size 
+    
+    :return: generated data(fake data) tensor, ex) tensor shapes [None, 28, 28, 1] for MNIST
+    """
+    with tf.variable_scope('generator', reuse=reuse):
+        with tf.name_scope('layer1'):
+            projected_z = tf.layers.dense(z, 7 * 7 * 256)
+            reshaped_z = tf.reshape(projected_z, [-1, 7, 7, 256])
+            layer1 = batch_norm(reshaped_z, training=training)
+            layer1 = leaky_relu(layer1, alpha)
+
+        with tf.name_scope('layer2'):
+            layer2 = tf.layers.conv2d_transpose(layer1, 128, kernel_size, strides=2, padding='same')
+            layer2 = batch_norm(layer2, training=training)
+            layer2 = leaky_relu(layer2, alpha)
+
+        with tf.name_scope('layer3'):
+            layer3 = tf.layers.conv2d_transpose(layer2, 64, kernel_size, strides=2, padding='same')
+            layer3 = batch_norm(layer3, training=training)
+            layer3 = leaky_relu(layer3, alpha)
+
+        with tf.name_scope('output'):
+            logits = tf.layers.conv2d_transpose(layer3, output_channel, kernel_size, strides=1, padding='same')
+            output = tf.nn.tanh(logits)
+
+        return output
