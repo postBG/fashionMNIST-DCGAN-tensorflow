@@ -13,7 +13,3 @@ def model_optimizer(g_loss, d_loss, learning_rate, beta1):
         g_optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=beta1).minimize(g_loss, var_list=g_vars)
 
     return d_optimizer, g_optimizer
-
-
-if __name__ == '__main__':
-    tf.app.run()

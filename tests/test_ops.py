@@ -2,7 +2,7 @@ import tensorflow as tf
 import unittest
 
 from ops import model_inputs, leaky_relu
-from data.fashion_mnist import IMAGE_PIXELS
+from data.fashion_mnist import IMAGE_SIZE
 
 
 class TestModelInputs(unittest.TestCase):
@@ -10,9 +10,10 @@ class TestModelInputs(unittest.TestCase):
         tf.reset_default_graph()
 
     def test_model_inputs(self):
-        inputs_real, inputs_z = model_inputs(real_dim=IMAGE_PIXELS, z_dim=100)
+        inputs_real, inputs_z = model_inputs(image_width=IMAGE_SIZE, image_height=IMAGE_SIZE, image_channels=1,
+                                             z_dim=100)
 
-        self.assertEquals([None, IMAGE_PIXELS], inputs_real.get_shape().as_list(),
+        self.assertEquals([None, IMAGE_SIZE, IMAGE_SIZE, 1], inputs_real.get_shape().as_list(),
                           'Incorrect Image Shape.  Found {} shape'.format(inputs_real.get_shape().as_list()))
         self.assertEquals('inputs_real:0', inputs_real.name,
                           'Incorrect Name.  Found {}'.format(inputs_real.name))

@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from data.fashion_mnist import IMAGE_PIXELS
+from data.fashion_mnist import IMAGE_SIZE
 
 GENERATOR = 'generator'
 DISCRIMINATOR = 'discriminator'
@@ -10,8 +10,9 @@ def leaky_relu(tensor, alpha=0.2):
     return tf.maximum(alpha * tensor, tensor)
 
 
-def model_inputs(real_dim=IMAGE_PIXELS, z_dim=100):
-    inputs_real = tf.placeholder(tf.float32, shape=[None, real_dim], name='inputs_real')
+def model_inputs(image_width=IMAGE_SIZE, image_height=IMAGE_SIZE, image_channels=1, z_dim=100):
+    inputs_real = tf.placeholder(tf.float32, shape=[None, image_width, image_height, image_channels],
+                                 name='inputs_real')
     inputs_z = tf.placeholder(tf.float32, shape=[None, z_dim], name='inputs_z')
 
     return inputs_real, inputs_z
