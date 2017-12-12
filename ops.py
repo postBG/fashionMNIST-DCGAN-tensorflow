@@ -91,3 +91,29 @@ def discriminator(images, reuse=False, alpha=0.2):
             output = tf.nn.sigmoid(logits)
 
         return output, logits
+
+
+def model_loss(input_real, input_z, output_channel=1, kernel_size=4, alpha=0.2):
+    """
+    Get the loss for the discriminator and generator
+    :param input_real: should be normalized [-1, 1] 
+    :param input_z: 
+    :param output_channel: The number of channels in the output image
+    :param kernel_size: 
+    :param alpha: relu alpha
+    :return: d_loss, g_loss
+    """
+    g_model = generator(input_z, output_channel=output_channel, reuse=False, training=True, kernel_size=kernel_size)
+    d_model_real, d_logits_real = discriminator(input_real, reuse=False, alpha=alpha)
+    d_model_fake, d_logits_fake = discriminator(g_model, reuse=True, alpha=alpha)
+
+    g_loss = tf.reduce_mean(
+        tf.nn.sigmoid_cross_entropy_with_logits(logits=d_logits_fake, labels=tf.ones_like(d_logits_fake)))
+
+    d_loss_real = tf.reduce_mean(
+        tf.nn.sigmoid_cross_entropy_with_logits(logits=d_logits_real, labels=tf.ones_like(d_logits_real)))
+    d_loss_fake = tf.reduce_mean(
+        tf.nn.sigmoid_cross_entropy_with_logits(logits=d_logits_fake, labels=tf.zeros_like(d_logits_fake)))
+    d_loss = d_loss_real + d_loss_fake
+
+    return d_loss, g_loss
