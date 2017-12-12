@@ -2,6 +2,9 @@ import tensorflow as tf
 
 from data.fashion_mnist import IMAGE_PIXELS
 
+GENERATOR = 'generator'
+DISCRIMINATOR = 'discriminator'
+
 
 def leaky_relu(tensor, alpha=0.2):
     return tf.maximum(alpha * tensor, tensor)
@@ -32,7 +35,7 @@ def generator(z, output_channel=1, reuse=False, training=True, kernel_size=4):
     
     :return: generated data(fake data) tensor, ex) tensor shapes [None, 28, 28, 1] for MNIST
     """
-    with tf.variable_scope('generator', reuse=reuse):
+    with tf.variable_scope(GENERATOR, reuse=reuse):
         with tf.name_scope('layer1'):
             projected_z = tf.layers.dense(z, 7 * 7 * 256)
             reshaped_z = tf.reshape(projected_z, [-1, 7, 7, 256])
@@ -66,7 +69,7 @@ def discriminator(images, reuse=False, alpha=0.2):
     :param alpha: leaky relu alpha
     :return: discriminator output and logits
     """
-    with tf.variable_scope('discriminator', reuse=reuse):
+    with tf.variable_scope(DISCRIMINATOR, reuse=reuse):
         with tf.name_scope('layer1'):
             layer1 = tf.layers.conv2d(images, 64, 4, strides=2, padding='same')
             layer1 = leaky_relu(layer1, alpha)
