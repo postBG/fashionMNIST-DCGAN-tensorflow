@@ -1,7 +1,7 @@
 import tensorflow as tf
 import unittest
 
-from ops import model_inputs, leaky_relu
+from layers import leaky_relu, model_inputs
 from data.fashion_mnist import IMAGE_SIZE
 
 
