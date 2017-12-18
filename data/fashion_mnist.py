@@ -13,6 +13,7 @@ IMAGE_MAX_VALUE = 255
 def max_normalize(data):
     return data / IMAGE_MAX_VALUE - 0.5
 
+
 # TODO: Normalize images between -1 to 1
 class FashionMNIST:
     def __init__(self, shuffle=True):
