@@ -11,8 +11,9 @@ def model_inputs(image_width=IMAGE_SIZE, image_height=IMAGE_SIZE, image_channels
     inputs_real = tf.placeholder(tf.float32, shape=[None, image_width, image_height, image_channels],
                                  name='inputs_real')
     inputs_z = tf.placeholder(tf.float32, shape=[None, z_dim], name='inputs_z')
+    learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
-    return inputs_real, inputs_z
+    return inputs_real, inputs_z, learning_rate
 
 
 def batch_norm(inputs, training=True):

@@ -11,7 +11,12 @@ IMAGE_MAX_VALUE = 255
 
 
 def max_normalize(data):
-    return data / IMAGE_MAX_VALUE - 0.5
+    """
+    scale images to -1 to 1
+    :param data: images
+    :return: normalized images
+    """
+    return (data / IMAGE_MAX_VALUE - 0.5) * 2
 
 
 # TODO: Normalize images between -1 to 1
